@@ -1,22 +1,18 @@
 import { create } from "zustand";
 
-interface BeerRecipe {
-  id: number;
-  name: string;
-  description: string;
-  // Add more properties as needed
-}
+import { BeerStoreType } from "./types";
 
-interface BeerStore {
-  recipes: BeerRecipe[];
-  setRecipes: (recipes: BeerRecipe[]) => void;
-}
-
-export const useBeerStore = create<BeerStore>((set) => ({
+export const useBeerStore = create<BeerStoreType>((set) => ({
   recipes: [],
+  page: 1,
   setRecipes: (recipes) => set({ recipes }),
-  deleteRecipes: (id: number) =>
+  setPage: (page) => set({ page }),
+  addRecipes: (newRecipes) =>
     set((state) => ({
-      recipes: state.recipes.filter((recipe) => recipe.id !== id),
+      recipes: [...state.recipes, ...newRecipes],
+    })),
+  removeRecipes: (recipeIds) =>
+    set((state) => ({
+      recipes: state.recipes.filter((recipe) => !recipeIds.includes(recipe.id)),
     })),
 }));

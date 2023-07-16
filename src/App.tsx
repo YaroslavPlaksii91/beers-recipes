@@ -1,33 +1,41 @@
 import { FC, useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import { useBeerStore } from "./zustand/store";
+import { getRecipes } from "./services/getRecipes";
 
 import { Container } from "./components/Container/Container";
+import { Heading } from "./components/Heading/Heading";
 import { RecipeList } from "./components/RecipeList/RecipeList";
 import { BeerRecipe } from "./components/BeerRecipe/BeerRecipe";
 
 export const App: FC = () => {
-  const { recipes, setRecipes } = useBeerStore();
+  const { recipes, setRecipes, page, setPage, addRecipes } = useBeerStore();
 
   useEffect(() => {
-    const fetchRecipes = async () => {
-      try {
-        const response = await fetch("https://api.punkapi.com/v2/beers?page=1");
-        const data = await response.json();
-        setRecipes(data);
-      } catch (error) {
-        console.error("Error fetching recipes:", error);
-      }
-    };
-
-    fetchRecipes();
+    getRecipes(page).then(setRecipes).catch(console.error);
   }, [setRecipes]);
+
+  useEffect(() => {
+    if (recipes.length < 15 && recipes.length > 0) {
+      setPage(page + 1);
+
+      getRecipes(page + 1)
+        .then(addRecipes)
+        .catch(console.error);
+    }
+  }, [recipes.length, setPage]);
 
   return (
     <Container>
-      <h1>Beer Recipes</h1>
-      <RecipeList />
-      {/* {recipes.length > 0 && <BeerRecipe recipe={recipes[14]} />} */}
+      <Heading level={1}>Beer Recipes</Heading>
+      <Routes>
+        <Route path="/" element={<RecipeList />} />
+
+        <Route path="/:id" element={<BeerRecipe />}></Route>
+
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
     </Container>
   );
 };

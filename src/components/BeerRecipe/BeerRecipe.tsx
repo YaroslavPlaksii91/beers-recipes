@@ -1,10 +1,20 @@
 import { FC } from "react";
+import { useParams } from "react-router-dom";
 
-import { BeerRecipeProps } from "./types";
+import { useBeerStore } from "../../zustand/store";
 
 import s from "./BeerRecipe.module.css";
 
-export const BeerRecipe: FC<BeerRecipeProps> = ({ recipe }) => {
+export const BeerRecipe: FC = () => {
+  const { id } = useParams();
+  const { recipes } = useBeerStore();
+
+  const recipe = recipes.find((rec) => rec.id === Number(id));
+
+  if (!recipe) {
+    return <div>Data not found!</div>;
+  }
+
   return (
     <article className={s.card}>
       <div className={s.imageWrap}>

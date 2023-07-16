@@ -1,4 +1,4 @@
-export type BeerRecipe = {
+export type BeerRecipeType = {
   id: number;
   name: string;
   tagline: string;
@@ -62,5 +62,5 @@ export type BeerRecipe = {
 };
 
 export type BeerRecipeProps = {
-  recipe: BeerRecipe;
+  recipe: BeerRecipeType;
 };
