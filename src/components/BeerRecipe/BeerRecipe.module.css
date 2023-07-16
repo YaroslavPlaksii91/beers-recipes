@@ -1,0 +1,70 @@
+.card {
+  display: flex;
+  gap: 100px;
+}
+
+.imageWrap {
+  width: 400px;
+}
+
+.imageWrap img {
+  max-height: 100vh;
+}
+
+.name {
+  font-size: 60px;
+  margin-bottom: 10px;
+}
+
+.tag {
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+.description {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.contributor {
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+.year {
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.food {
+  margin-bottom: 10px;
+  list-style: inside;
+}
+
+.tips {
+  margin-bottom: 10px;
+}
+
+.ingredients {
+  display: flex;
+  gap: 50px;
+}
+
+.ingredientItem {
+  margin-bottom: 5px;
+}
+
+.ingredientTitle {
+  font-size: 18px;
+  margin-bottom: 5px;
+  text-decoration: underline;
+}
+
+.ingredientName {
+  font-size: 16px;
+  margin-bottom: 5px;
+}

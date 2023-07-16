@@ -15,4 +15,8 @@ interface BeerStore {
 export const useBeerStore = create<BeerStore>((set) => ({
   recipes: [],
   setRecipes: (recipes) => set({ recipes }),
+  deleteRecipes: (id: number) =>
+    set((state) => ({
+      recipes: state.recipes.filter((recipe) => recipe.id !== id),
+    })),
 }));
