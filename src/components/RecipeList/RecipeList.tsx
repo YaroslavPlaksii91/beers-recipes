@@ -6,7 +6,7 @@ import { getRecipes } from "../../services/getRecipes";
 
 import s from "./RecipeList.module.css";
 
-export const RecipeList: FC = () => {
+const RecipeList: FC = () => {
   const { recipes, removeRecipes, addRecipes, page } = useBeerStore();
   const [selectedRecipes, setSelectedRecipes] = useState<number[]>([]);
   const observerTarget = useRef(null);
@@ -117,3 +117,5 @@ export const RecipeList: FC = () => {
     </section>
   );
 };
+
+export default RecipeList;

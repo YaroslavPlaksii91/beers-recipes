@@ -5,7 +5,7 @@ import { useBeerStore } from "../../zustand/store";
 
 import s from "./BeerRecipe.module.css";
 
-export const BeerRecipe: FC = () => {
+const BeerRecipe: FC = () => {
   const { id } = useParams();
   const { recipes } = useBeerStore();
 
@@ -71,3 +71,5 @@ export const BeerRecipe: FC = () => {
     </article>
   );
 };
+
+export default BeerRecipe;
