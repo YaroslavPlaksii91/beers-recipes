@@ -7,32 +7,11 @@ import { getRecipes } from "../../services/getRecipes";
 import s from "./RecipeList.module.css";
 
 export const RecipeList: FC = () => {
-  const { recipes, removeRecipes, addRecipes } = useBeerStore();
+  const { recipes, removeRecipes, addRecipes, page } = useBeerStore();
   const [selectedRecipes, setSelectedRecipes] = useState<number[]>([]);
-  const visibleRecipesRef = useRef<number>(15);
+  const observerTarget = useRef(null);
 
-  console.log(recipes);
-
-  //   let step = 15;
-
-  //   if (
-  //     window.innerHeight + document.documentElement.scrollTop !==
-  //     document.documentElement.offsetHeight
-  //   ) {
-  //     return;
-  //   }
-
-  //   removeRecipes(recipes.slice(0, 5).map((recipe) => recipe.id));
-
-  //   addRecipes(recipes.slice(15, 20));
-
-  //   // step += 5;
-  // };
-
-  // useEffect(() => {
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => window.removeEventListener("scroll", handleScroll);
-  // }, [handleScroll]);
+  let visibleRecipes = recipes.slice(0, 15);
 
   const handleRecipeClick = (
     event: MouseEvent<HTMLAnchorElement>,
@@ -55,18 +34,20 @@ export const RecipeList: FC = () => {
     setSelectedRecipes([]);
   };
 
-  const observerTarget = useRef(null);
-
   useEffect(() => {
     let initialLoad = true;
 
     const observer = new IntersectionObserver(
       async (entries) => {
         if (entries[0].isIntersecting && !initialLoad) {
-          const nextVisibleRecipes = visibleRecipesRef.current + 5;
-          if (nextVisibleRecipes > recipes.length) {
+          let nextVisibleRecipes = (visibleRecipes.length += 5);
+          visibleRecipes = recipes.slice(
+            nextVisibleRecipes - 5,
+            nextVisibleRecipes
+          );
+          if (recipes.length < 15) {
             try {
-              const nextPage = Math.ceil(recipes.length / 5) + 1;
+              const nextPage = page + 1;
               const newRecipes = await getRecipes(nextPage);
               if (newRecipes.length > 0) {
                 addRecipes(newRecipes);
@@ -77,8 +58,6 @@ export const RecipeList: FC = () => {
           }
 
           removeRecipes(recipes.slice(0, 5).map((recipe) => recipe.id));
-          visibleRecipesRef.current = nextVisibleRecipes;
-          addRecipes(recipes.slice(nextVisibleRecipes - 5, nextVisibleRecipes));
         } else {
           initialLoad = false;
         }
@@ -95,9 +74,7 @@ export const RecipeList: FC = () => {
         observer.unobserve(observerTarget.current);
       }
     };
-  }, [visibleRecipesRef, removeRecipes, addRecipes, recipes]);
-
-  const visibleRecipes = recipes.slice(0, 15);
+  }, [removeRecipes, addRecipes, recipes, page]);
 
   return (
     <section>
